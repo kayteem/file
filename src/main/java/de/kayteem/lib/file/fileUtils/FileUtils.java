@@ -6,8 +6,10 @@
 
 package de.kayteem.lib.file.fileUtils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 
@@ -30,6 +32,31 @@ public class FileUtils {
         }
 
         return file;
+    }
+
+
+    public static String retrieveDownloadsPath() {
+        return "C:/Users/" + System.getProperty("user.name") + "/Downloads/";
+    }
+
+    public static File retrieveDownloadsDirectory() throws FileNotFoundException {
+        File downloadsDir = new File(retrieveDownloadsPath());
+
+        if (!downloadsDir.exists()) {
+            throw new FileNotFoundException("\"Downloads\" could not be found!");
+        }
+
+        return downloadsDir;
+    }
+
+
+    public static void openFile(String path) throws IOException {
+        openFile(new File(path));
+    }
+
+    public static void openFile(File file) throws IOException {
+        Desktop dt = Desktop.getDesktop();
+        dt.open(file);
     }
 
 }
