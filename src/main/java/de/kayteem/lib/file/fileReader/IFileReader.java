@@ -1,5 +1,5 @@
 /**
- * Created by:  VWTOBIA
+ * Created by:  Tobias Mielke
  * Created on:  24.06.2015
  * Modified on: 09.09.2015
  */
@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface IFileReader {
 
-    List<String> readLineStrings() throws IOException;
+    List<String> readFromFile() throws IOException;
 
 }
