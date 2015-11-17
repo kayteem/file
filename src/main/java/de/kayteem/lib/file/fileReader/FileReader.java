@@ -25,8 +25,7 @@ public class FileReader implements IFileReader {
 
 
     // IMPLEMENTATION
-    @Override
-    public List<String> readLineStrings() throws IOException {
+    public List<String> readFromFile() throws IOException {
 
         // [1] - Create string list.
         final List<String> lineStrings = new ArrayList<>();
