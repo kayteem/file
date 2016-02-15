@@ -1,20 +1,38 @@
 /**
  * Created by:  Tobias Mielke
  * Created on:  30.10.2015
- * Changed on:  10.11.2015
+ * Changed on:  15.02.2016
  */
 
 package de.kayteem.lib.file.fileUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileUtils {
+
+    public static BufferedImage loadImageResource(String filename) throws IOException {
+        return ImageIO.read(ClassLoader.getSystemResource(filename));
+    }
+
+    public static List<BufferedImage> loadImageResources(String... filenames) throws IOException {
+        List<BufferedImage> images = new ArrayList<>();
+        for (String filename : filenames) {
+            images.add(ImageIO.read(ClassLoader.getSystemResource(filename)));
+        }
+
+        return images;
+    }
+
 
     public static String retrieveExecutionPath(Class clazz) throws FileNotFoundException {
         File file = retrieveJarFile(clazz);
