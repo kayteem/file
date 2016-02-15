@@ -9,9 +9,7 @@ package de.kayteem.lib.file.fileUtils;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.ArrayList;
@@ -19,6 +17,34 @@ import java.util.List;
 
 
 public class FileUtils {
+
+    // RESOURCES
+    public static void openResource(String filename) throws IOException {
+        if (Desktop.isDesktopSupported()) {
+
+            // [1] - Retrieve file.
+            File file = new File(filename);
+
+            // [2] - If file does not exist -> Load as resource stream.
+            if (!file.exists()) {
+                InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
+                OutputStream outputStream = new FileOutputStream(file);
+                byte[] buffer = new byte[1024];
+                int length;
+
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+
+                outputStream.close();
+                inputStream.close();
+            }
+
+            // [3] - Open file.
+            Desktop.getDesktop().open(file);
+        }
+    }
+
 
     public static BufferedImage loadImageResource(String filename) throws IOException {
         return ImageIO.read(ClassLoader.getSystemResource(filename));
@@ -31,6 +57,17 @@ public class FileUtils {
         }
 
         return images;
+    }
+
+
+    // FILES IN DIRECTORY
+    public static void openFile(String path) throws IOException {
+        openFile(new File(path));
+    }
+
+    public static void openFile(File file) throws IOException {
+        Desktop dt = Desktop.getDesktop();
+        dt.open(file);
     }
 
 
@@ -65,16 +102,6 @@ public class FileUtils {
         }
 
         return downloadsDir;
-    }
-
-
-    public static void openFile(String path) throws IOException {
-        openFile(new File(path));
-    }
-
-    public static void openFile(File file) throws IOException {
-        Desktop dt = Desktop.getDesktop();
-        dt.open(file);
     }
 
 }
