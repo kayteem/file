@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FileUtils {
+public class FileUtils_V_0_6 {
 
     // RESOURCES
     public static void openResource(String filename) throws IOException {
