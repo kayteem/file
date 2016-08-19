@@ -22,38 +22,31 @@ public class FileUtils {
     public static void openResource(String filename) throws IOException {
         if (Desktop.isDesktopSupported()) {
 
-            // [1] - Retrieve file.
-            File file = new File(filename);
+            // [1] - Load resource.
+            File file = loadResource(filename);
 
-            // [2] - If file does not exist -> Load as resource stream.
-            if (!file.exists()) {
-                InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
-                OutputStream outputStream = new FileOutputStream(file);
-                byte[] buffer = new byte[1024];
-                int length;
-
-                while ((length = inputStream.read(buffer)) > 0) {
-                    outputStream.write(buffer, 0, length);
-                }
-
-                outputStream.close();
-                inputStream.close();
-            }
-
-            // [3] - Open file.
+            // [2] - Open resource.
             Desktop.getDesktop().open(file);
         }
     }
 
-
     public static BufferedImage loadImageResource(String filename) throws IOException {
-        return ImageIO.read(ClassLoader.getSystemResource(filename));
+
+        // [1] - Load resource.
+        File imageFile = loadResource(filename);
+
+        // [2] - Return image.
+        return ImageIO.read(imageFile);
     }
 
     public static List<BufferedImage> loadImageResources(String... filenames) throws IOException {
+
+        // [1] - Create image list.
         List<BufferedImage> images = new ArrayList<>();
+
+        // [2] - Add image resources.
         for (String filename : filenames) {
-            images.add(ImageIO.read(ClassLoader.getSystemResource(filename)));
+            images.add(loadImageResource(filename));
         }
 
         return images;
@@ -102,6 +95,38 @@ public class FileUtils {
         }
 
         return downloadsDir;
+    }
+
+
+    public static String retrieveParentDirectoryPath(File file) {
+        String path = file.getAbsolutePath();
+
+        return path.substring(0, path.lastIndexOf(File.separator));
+    }
+
+
+    // HELPERS
+    private static File loadResource(String filename) throws IOException {
+
+        // [1] - Retrieve file.
+        File file = new File(filename);
+
+        // [2] - If file does not exist -> Load as resource stream.
+        if (!file.exists()) {
+            InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
+            OutputStream outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int length;
+
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+        }
+
+        return file;
     }
 
 }
