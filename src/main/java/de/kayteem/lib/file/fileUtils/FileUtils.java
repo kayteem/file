@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FileUtils_V_0_6 {
+public class FileUtils {
 
     // RESOURCES
     public static void openResource(String filename) throws IOException {
@@ -65,8 +65,9 @@ public class FileUtils_V_0_6 {
 
 
     public static String retrieveExecutionPath(Class clazz) throws FileNotFoundException {
-        File file = retrieveJarFile(clazz);
-        return file.getParentFile().getPath() + "\\";
+        String absolutePath = retrieveJarFile(clazz).getAbsolutePath();
+
+        return absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
     }
 
     public static File retrieveJarFile(Class clazz) throws FileNotFoundException {
