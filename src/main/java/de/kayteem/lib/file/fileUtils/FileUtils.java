@@ -7,6 +7,8 @@
 package de.kayteem.lib.file.fileUtils;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -17,6 +19,34 @@ import java.util.List;
 
 
 public class FileUtils {
+
+    // FILE DIALOGS
+    public static String showFileDialog(Component parent, String title, String approveButtonText, String initialDir, FileNameExtensionFilter extension) {
+
+        // [1] - Create file chooser.
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle(title);
+        fc.setApproveButtonText(approveButtonText);
+        fc.setMultiSelectionEnabled(false);
+
+        // [2] - Set initial directory.
+        if (initialDir != null) {
+            File initialDirectory = new File(initialDir);
+            if (initialDirectory.exists()) {
+                fc.setCurrentDirectory(initialDirectory);
+            }
+        }
+
+        // [3] - Set filter.
+        fc.addChoosableFileFilter(extension);
+
+        // [4] - Open.
+        int result = fc.showOpenDialog(parent);
+
+        // [5] - Return file or null (if cancelled).
+        return (result == JFileChooser.APPROVE_OPTION) ? fc.getSelectedFile().getAbsolutePath() : null;
+    }
+
 
     // RESOURCES
     public static void openResource(String filename) throws IOException {
