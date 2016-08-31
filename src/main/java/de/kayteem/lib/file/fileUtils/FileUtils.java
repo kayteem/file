@@ -38,7 +38,10 @@ public class FileUtils {
         }
 
         // [3] - Set filter.
-        fc.addChoosableFileFilter(extension);
+        if (extension != null) {
+            fc.setAcceptAllFileFilterUsed(false);
+            fc.addChoosableFileFilter(extension);
+        }
 
         // [4] - Open.
         int result = fc.showOpenDialog(parent);
