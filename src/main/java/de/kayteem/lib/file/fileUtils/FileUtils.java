@@ -85,8 +85,6 @@ public class FileUtils {
         return images;
     }
 
-
-    // FILES IN DIRECTORY
     public static void openFile(String path) throws IOException {
         openFile(new File(path));
     }
@@ -97,12 +95,7 @@ public class FileUtils {
     }
 
 
-    public static String retrieveExecutionPath(Class clazz) throws FileNotFoundException {
-        String absolutePath = retrieveJarFile(clazz).getAbsolutePath();
-
-        return absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
-    }
-
+    // PATHS
     public static File retrieveJarFile(Class clazz) throws FileNotFoundException {
         File file;
 
@@ -116,6 +109,11 @@ public class FileUtils {
         return file;
     }
 
+    public static String retrieveExecutionPath(Class clazz) throws FileNotFoundException {
+        String absolutePath = retrieveJarFile(clazz).getAbsolutePath();
+
+        return retrieveParentDirectoryPath(absolutePath);
+    }
 
     public static String retrieveDownloadsPath() {
         return "C:/Users/" + System.getProperty("user.name") + "/Downloads/";
@@ -131,11 +129,12 @@ public class FileUtils {
         return downloadsDir;
     }
 
+    public static String retrieveParentDirectoryPath(String filePath) {
+        return filePath.substring(0, filePath.lastIndexOf(File.separator));
+    }
 
     public static String retrieveParentDirectoryPath(File file) {
-        String path = file.getAbsolutePath();
-
-        return path.substring(0, path.lastIndexOf(File.separator));
+        return retrieveParentDirectoryPath(file.getAbsolutePath());
     }
 
 
