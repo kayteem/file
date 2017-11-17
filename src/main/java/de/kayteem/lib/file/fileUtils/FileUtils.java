@@ -35,6 +35,12 @@ public class FileUtils {
             if (initialDirectory.exists()) {
                 fc.setCurrentDirectory(initialDirectory);
             }
+            else {
+                File parentDir = new File(retrieveParentDirectoryPath(initialDir));
+                if (parentDir.exists()) {
+                    fc.setCurrentDirectory(parentDir);
+                }
+            }
         }
 
         // [3] - Set filter.
@@ -135,6 +141,20 @@ public class FileUtils {
 
     public static String retrieveParentDirectoryPath(File file) {
         return retrieveParentDirectoryPath(file.getAbsolutePath());
+    }
+
+
+    // DIRECTORIES
+    public static File createDirInPath(String path, String dirName) throws IOException {
+        File fileDir = new File(path + "\\" + dirName);
+
+        if (!fileDir.exists()) {
+            if (!fileDir.mkdir()) {
+                throw new IOException("Couldn't create directory: " + fileDir.getAbsolutePath());
+            }
+        }
+
+        return fileDir;
     }
 
 
