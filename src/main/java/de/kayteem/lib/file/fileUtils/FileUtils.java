@@ -1,9 +1,3 @@
-/**
- * Created by:  Tobias Mielke
- * Created on:  30.10.2015
- * Changed on:  15.02.2016
- */
-
 package de.kayteem.lib.file.fileUtils;
 
 import javax.imageio.ImageIO;
@@ -18,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Created by:  Tobias Mielke
+ * Created on:  30.10.2015
+ * Changed on:  11.08.2019
+ */
 public class FileUtils {
 
     // FILE DIALOGS
@@ -69,6 +68,29 @@ public class FileUtils {
         }
     }
 
+    public static File loadResource(String filename) throws IOException {
+
+        // [1] - Retrieve file.
+        File file = new File(filename);
+
+        // [2] - If file does not exist -> Load as resource stream.
+        if (!file.exists()) {
+            InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
+            OutputStream outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int length;
+
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            outputStream.close();
+            inputStream.close();
+        }
+
+        return file;
+    }
+    
     public static BufferedImage loadImageResource(String filename) throws IOException {
 
         // [1] - Load resource.
@@ -102,6 +124,10 @@ public class FileUtils {
 
 
     // PATHS
+    public static boolean jarFileFound(Class clazz) throws FileNotFoundException {
+        return !FileUtils.retrieveJarFile(clazz).isDirectory();
+    }
+
     public static File retrieveJarFile(Class clazz) throws FileNotFoundException {
         File file;
 
@@ -136,7 +162,7 @@ public class FileUtils {
     }
 
     public static String retrieveParentDirectoryPath(String filePath) {
-        return filePath.substring(0, filePath.lastIndexOf(File.separator));
+        return filePath.substring(0, filePath.lastIndexOf(File.separator) + 1);
     }
 
     public static String retrieveParentDirectoryPath(File file) {
@@ -156,30 +182,5 @@ public class FileUtils {
 
         return fileDir;
     }
-
-
-    // HELPERS
-    private static File loadResource(String filename) throws IOException {
-
-        // [1] - Retrieve file.
-        File file = new File(filename);
-
-        // [2] - If file does not exist -> Load as resource stream.
-        if (!file.exists()) {
-            InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream(filename);
-            OutputStream outputStream = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            int length;
-
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-
-            outputStream.close();
-            inputStream.close();
-        }
-
-        return file;
-    }
-
+    
 }
