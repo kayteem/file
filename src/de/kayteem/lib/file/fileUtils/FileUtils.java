@@ -125,10 +125,10 @@ public class FileUtils {
 
     // PATHS
     public static boolean jarFileFound(Class clazz) throws FileNotFoundException {
-        return !FileUtils.retrieveJarFile(clazz).isDirectory();
+        return !FileUtils.retrieveCodeBase(clazz).isDirectory();
     }
 
-    public static File retrieveJarFile(Class clazz) throws FileNotFoundException {
+    public static File retrieveCodeBase(Class clazz) throws FileNotFoundException {
         File file;
 
         try {
@@ -142,9 +142,13 @@ public class FileUtils {
     }
 
     public static String retrieveExecutionPath(Class clazz) throws FileNotFoundException {
-        String absolutePath = retrieveJarFile(clazz).getAbsolutePath();
+        File fileCodeBase = retrieveCodeBase(clazz);
 
-        return retrieveParentDirectoryPath(absolutePath);
+        String pathCodeBase = fileCodeBase.getAbsolutePath() + File.separator;
+
+        return fileCodeBase.isDirectory()
+                ? pathCodeBase
+                : retrieveParentDirectoryPath(pathCodeBase);
     }
 
     public static String retrieveDownloadsPath() {
